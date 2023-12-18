@@ -3,7 +3,7 @@
 
 EAPI=7
 
-inherit autotools desktop xdg flag-o-matic
+inherit autotools desktop xdg
 
 DESCRIPTION="Visual programming language for multimedia"
 HOMEPAGE="http://msp.ucsd.edu/software.html"
@@ -40,7 +40,6 @@ src_prepare() {
 
 # Disable portaudio and portmidi because otherwise Pd's local sources get installed
 src_configure() {
-	use double-precision && append-cppflags "-DPD_FLOATSIZE=64"
 	econf --disable-portaudio \
 		--without-local-portaudio \
 		--disable-portmidi \
@@ -48,7 +47,8 @@ src_configure() {
 		$(use_enable alsa) \
 		$(use_enable jack) \
 		$(use_enable fftw) \
-		$(use_enable oss)
+		$(use_enable oss) \
+		$(usex double-precision "--with-floatsize=64" "")
 }
 
 src_install() {
